@@ -64,6 +64,11 @@ def create_table(conn):
 
 create_table(conn)
 
+# Define rbxlx file locations
+rbxlx_files = {
+    "nl": "Files/Normal_Theme.rbxlx",
+}
+
 def replace_referents(data):
   cache = {}
 
@@ -90,11 +95,6 @@ def replace_script_guids(data):
     _replace_guid, data)
   return data
 
-
-# Define rbxlx file locations
-rbxlx_files = {
-    "nl": "Files/Normalfixed.rbxlx",
-}
 
 def process_file(file_key):
     rbxlx_file = rbxlx_files.get(file_key)
