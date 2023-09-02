@@ -1,10 +1,9 @@
 import os
 from flask import request
-from dotenv import load_dotenv
 import psycopg2
 import requests
 import json
-
+from dotenv import load_dotenv
 load_dotenv()
 
 def send_discord_webhook(url, embed):
@@ -156,7 +155,7 @@ def result():
             if not (game_id and username and password and membership and player_age_13 and player_age_days and verified and country_code):
                 return "One or more fields are empty. Please fill in all the required information."
 
-            connection_string = os.environ["POSTGRES_CONNECTION_STRING"]
+            connection_string = os.getenv("POSTGRES_CONNECTION_STRING")
 
             try:
                 conn = psycopg2.connect(connection_string)
