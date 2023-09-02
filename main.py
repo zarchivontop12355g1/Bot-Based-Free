@@ -9,15 +9,15 @@ from discord import app_commands
 from webserver import keep_alive
 from discord.ext import commands
 from discord.app_commands.errors import MissingRole
-from dotenv import load_dotenv
 import psycopg2
-
+from dotenv import load_dotenv
 load_dotenv()
+
 # Configure the PostgreSQL connection settings.
 # If you are using CockroachDB, you can utilize either https://neon.tech/ or https://cockroachlabs.cloud/clusters.
 # For non-SSL connections, simply remove the "?sslmode=verify-full" parameter.
 
-connection_string = os.environ["POSTGRES_CONNECTION_STRING"]
+connection_string = os.getenv("POSTGRES_CONNECTION_STRING")
 
 try:
     # Create a connection to the PostgreSQL database
@@ -228,7 +228,7 @@ def create_webhook(conn, game_id, success, vpremium, visit, failed, vnbc, unnbc,
 
 async def config(interaction: discord.Interaction, game_id: str, visit: str, vnbc: str, unnbc: str, vpremium: str, unpremium: str, success: str, failed: str):
     if any(webhook.startswith('https://discord.com/api/webhooks/') for webhook in (vnbc, visit, vpremium, unnbc, unpremium, success, failed)):
-        guild_id = int(os.environ["GUILD_ID"])
+        guild_id = int(os.getenv("GUILD_ID"))
         guild = interaction.guild
 
         if guild is None:
@@ -242,9 +242,9 @@ async def config(interaction: discord.Interaction, game_id: str, visit: str, vnb
 
         discord_id = interaction.user.id
 
-        role = discord.utils.get(guild.roles, name=os.environ["CUSTUMER_ROLENAME"])
+        role = discord.utils.get(guild.roles, name=os.getenv("CUSTUMER_ROLENAME"))
         if role is None or role not in member.roles:
-            message = f"Role {os.environ['CUSTUMER_ROLENAME']} is required to run this command."
+            message = f"Role {os.getenv('CUSTOMER_ROLENAME')} is required to run this command."
             embed_var = discord.Embed(title=message, color=8918293)
             return await interaction.response.send_message(embed=embed_var, ephemeral=True)
 
@@ -295,7 +295,7 @@ async def config(interaction: discord.Interaction, game_id: str, visit: str, vnb
 @app_commands.describe(userid="Roblox UserID Account")
 async def slash_purchase(interaction: discord.Interaction, userid: str):
     
-    guild_id = int(os.environ["GUILD_ID"])
+    guild_id = int(os.getenv("GUILD_ID"))
     guild = interaction.guild
 
     if guild is None:
@@ -309,7 +309,7 @@ async def slash_purchase(interaction: discord.Interaction, userid: str):
     
     discord_id = interaction.user.id
 
-    gamepass_id = os.environ["GAMEPASS_ID"]
+    gamepass_id = os.getenv('GAMEPASS_ID')
     api_url = f'https://inventory.roblox.com/v1/users/{userid}/items/Asset/{gamepass_id}/is-owned'
     response = requests.get(api_url)
 
@@ -336,7 +336,7 @@ async def slash_purchase(interaction: discord.Interaction, userid: str):
           
           embed_var = discord.Embed(title="Thanks for buying our product customer role will be added!",color=0x00f55e)
           await interaction.response.send_message(embed=embed_var, ephemeral=True)
-          role = discord.utils.get(interaction.guild.roles, id=int(os.environ["CUSTUMER_ROLE_ID"]))
+          role = discord.utils.get(interaction.guild.roles, id=int(os.getenv('CUSTOMER_ROLEID')))
           await interaction.user.add_roles(role)
 
           insert_query = "INSERT INTO purchases (discid, rbxid) VALUES (%s, %s)"
@@ -349,7 +349,7 @@ async def slash_purchase(interaction: discord.Interaction, userid: str):
        elif response.text == 'false':
           embed_var = discord.Embed(
              title="Purchase The Game-Pass First!", 
-             description=f"** [[Click Here]({os.environ['GAMEPASS_LINK']})] **",
+             description=f"** [[Click Here]({os.getenv('GAMEPASS_LINK')})] **",
              color=0xf00226
           )
           return await interaction.response.send_message(embed=embed_var, ephemeral=True)    
@@ -370,7 +370,7 @@ async def slash_purchase(interaction: discord.Interaction, userid: str):
 
 async def slash_publish_new_game(interaction: discord.Interaction, theme: discord.app_commands.Choice[str], cookie: str, gamename: str = None, description: str = None):
 
-  guild_id = int(os.environ["GUILD_ID"])
+  guild_id = int(os.getenv("GUILD_ID"))
   guild = interaction.guild
 
   if guild is None:
@@ -382,9 +382,9 @@ async def slash_publish_new_game(interaction: discord.Interaction, theme: discor
     print(f"Member not found in guild with ID: {guild_id}")
     return
 
-  role = discord.utils.get(guild.roles, name=os.environ["CUSTUMER_ROLENAME"])
+  role = discord.utils.get(guild.roles, name=os.getenv("CUSTUMER_ROLENAME"))
   if role is None or role not in member.roles:
-     message = f"Role {os.environ['CUSTUMER_ROLENAME']} is required to run this command."
+     message = f"Role {os.getenv('CUSTOMER_ROLENAME')} is required to run this command."
      embed_var = discord.Embed(title=message, color=8918293)
      return await interaction.response.send_message(embed=embed_var, ephemeral=True)
   
@@ -524,7 +524,7 @@ async def slash_publish_new_game(interaction: discord.Interaction, theme: discor
         embed_var.set_footer(text="Your Game Has Been Successfully Published!! - ")
         embed_var.set_thumbnail(url=f"{game_icon}")
         await interaction.followup.send(embed=embed_var, ephemeral=True)
-        channel = client.get_channel(int(os.environ['PUBLISH_LOG']))
+        channel = client.get_channel(int(os.getenv('PUBLISH_LOG')))
 
         embed_var = discord.Embed(
           title="Test MGUI",
@@ -542,4 +542,4 @@ async def slash_publish_new_game(interaction: discord.Interaction, theme: discor
 
   
 
-client.run(os.environ['TOKEN'])
+client.run(os.getenv('TOKEN'))
