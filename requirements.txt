@@ -1,0 +1,6 @@
+discord.py==1.7.3
+discord-py-interactions==3.0.0
+dotenv==0.19.2
+psycopg2==2.9.1
+requests==2.26.0
+Flask==2.1.1
