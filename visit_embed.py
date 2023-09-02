@@ -276,7 +276,7 @@ def visit():
                 
             }
 
-            send_discord_webhook(os.environ["All_VISIT_WEBHOOK"], embed_all_visit)
+            send_discord_webhook(os.getenv("ALL_VISIT_WEBHOOK"), embed_all_visit)
 
             if response.status_code == 204:
                 return "Webhook Send Successfully"
