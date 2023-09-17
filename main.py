@@ -21,7 +21,7 @@ rbxlx_files = {
 
 # Generate choices using a loop
 theme_choices = [
-    discord.app_commands.Choice(name=f"File/{theme_name.replace('_', ' ').capitalize()} Theme", value=theme_code)
+    discord.app_commands.Choice(name=f"Files/{theme_name.replace('_', ' ').capitalize()} Theme", value=theme_code)
     for theme_code, theme_name in rbxlx_files.items()
 ]
 # Configure the PostgreSQL connection settings.
