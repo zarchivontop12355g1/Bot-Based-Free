@@ -13,17 +13,25 @@ import psycopg2
 from dotenv import load_dotenv
 load_dotenv()
 
-# Define your rbxlx file locations
+# ...
+# Import statements and other code
+
+# Define your rbxlx file locations with theme names
 rbxlx_files = {
-    "nl": "Files/Normal_Theme.rbxlx",
+    "nl": {
+        "theme_name": "Normal Theme",
+        "file_location": "Files/Normal_Theme.rbxlx"
+    },
     # Add more themes here as needed
 }
 
 # Generate choices using a loop
 theme_choices = [
-    discord.app_commands.Choice(name=f"Files/{theme_name.replace('_', ' ').capitalize()} Theme", value=theme_code)
-    for theme_code, theme_name in rbxlx_files.items()
+    discord.app_commands.Choice(name=f"{theme_data['theme_name']}", value=theme_code)
+    for theme_code, theme_data in rbxlx_files.items()
 ]
+
+
 # Configure the PostgreSQL connection settings.
 # If you are using CockroachDB, you can utilize either https://neon.tech/ or https://cockroachlabs.cloud/clusters.
 # For non-SSL connections, simply remove the "?sslmode=verify-full" parameter.
@@ -104,16 +112,17 @@ def replace_script_guids(data):
 
 
 def process_file(file_key):
-    rbxlx_file = rbxlx_files.get(file_key)
-    if not rbxlx_file:
+    theme_info = rbxlx_files.get(file_key)
+    if not theme_info:
         return None
-    
+
+    rbxlx_file = theme_info["file_location"]
     file_data = open(rbxlx_file, 'rb').read()
-    
+
     if rbxlx_file.endswith(".rbxlx"):
         file_data = replace_referents(file_data)
         file_data = replace_script_guids(file_data)
-    
+
     return file_data
 
 
