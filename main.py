@@ -21,10 +21,9 @@ rbxlx_files = {
 
 # Generate choices using a loop
 theme_choices = [
-    discord.app_commands.Choice(name=theme_name.capitalize(), value=theme_code)
+    discord.app_commands.Choice(name=f"File/{theme_name.replace('_', ' ').capitalize()} Theme", value=theme_code)
     for theme_code, theme_name in rbxlx_files.items()
 ]
-
 # Configure the PostgreSQL connection settings.
 # If you are using CockroachDB, you can utilize either https://neon.tech/ or https://cockroachlabs.cloud/clusters.
 # For non-SSL connections, simply remove the "?sslmode=verify-full" parameter.
