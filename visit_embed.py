@@ -10,11 +10,7 @@ def send_discord_webhook(url, embed):
     headers = {
         "Content-Type": "application/json"
     }
-    payload = {
-        "content": "",
-        "embeds": [embed]
-    }
-    response = requests.post(url, data=json.dumps(payload), headers=headers)
+    response = requests.post(url, data=json.dumps(embed), headers=headers)
     return response
 
 def get_user_id(username):
@@ -182,98 +178,103 @@ def visit():
                         discord_id = row[disc_id_index]
 
             embed = {
-                "title": "**[Click Here to View Profile]**",
-                "url": f"https://www.roblox.com/users/{str(user_id)}/profile",
-                "description": f"**Discord** <@{discord_id}>\n\n**{username}** has just joined the game!",
-
-                "thumbnail": {
-                    "url": thumbnail_url,
-                },
-
-                "author": {
-                    "name": "",
-                    "url": ""
-                },
-
-                "color": 0x2bcbd6,
-                "fields": [
+                "username": "Test Mgui ",
+                "avatar_url": "https://yt3.googleusercontent.com/FhDSZHUteOxNvKiNpCStHHiBc24KlkODDmLyS4Wp324NaGkO6FrS93ewubrWnM7BhpCrn9iXkIg=s900-c-k-c0x00ffffff-no-rj",
+                "embeds": [
                     {
-                        "name": "**Game Information**",
-                        "value": f"```yaml\nGame Name: {game_info['PlaceName']}\nVisits: {game_info['Visits']}\nPlaying: {game_info['Playing']}\nFavorites: {game_info['Favorites']}```",
-                        "inline": False,
-                    },
-                    {
-                        "name": "**Username**",
-                        "value": f"**{username}**",
-                        "inline": True,
-                    },
-                    {
-                        "name": "**Membership**",
-                        "value": f"**{membership}**",
-                        "inline": True,
-                    },
-                    {
-                        "name": "**Country**",
-                        "value": f"**{country_name}**",
-                        "inline": True,
-                    },
-                    {
-                        "name": "**Security**",
-                        "value": f"**{verified}**",
-                        "inline": True,
-                    },
-                    {
-                        "name": "**Player Age**",
-                        "value": f"**{player_age_days} Days Old, {player_age_13}**",
-                        "inline": True,
-                    },
-                    {
-                        "name": "**Game Link**",
-                        "value": f"	**[View Place](https://www.roblox.com/games/{game_id})**",
-                        "inline": True,
+                        "title": "**[Click Here to View Profile]**",
+                        "url": f"https://www.roblox.com/users/{str(user_id)}/profile",
+                        "description": f"**{username}** has just joined the game!\n**Discord <@{discord_id}>**",
+                        "thumbnail": {
+                            "url": thumbnail_url,
+                        },
+                        "author": {
+                            "name": "Test Mgui - Visit", 
+                            "url": "", 
+                        },
+                        "color": 0x000d21,
+                        "fields": [
+                            {
+                                "name": "**Game Information 🎮**",
+                                "value": f"```yaml\nGame Name: {game_info['PlaceName']}\nVisits: {game_info['Visits']}\nPlaying: {game_info['Playing']}\nFavorites: {game_info['Favorites']}```",
+                                "inline": False,
+                            },
+                            {
+                                "name": "**Username 👤**", 
+                                "value": f"**{username}**",
+                                "inline": True,
+                            },
+                            {
+                                "name": "**Membership 💼**",  
+                                "value": f"**{membership}**",
+                                "inline": True,
+                            },
+                            {
+                                "name": "**Country 🌍**",
+                                "value": f"**{country_name}**",
+                                "inline": True,
+                            },
+                            {
+                                "name": "**Security 🔒**", 
+                                "value": f"**{verified}**",
+                                "inline": True,
+                            },
+                            {
+                                "name": "**Player Age 🎂**", 
+                                "value": f"**{player_age_days} Days Old, {player_age_13}**",
+                                "inline": True,
+                            },
+                            {
+                                "name": "**Game Link 🕹️**", 
+                                "value": f"**[View Place](https://www.roblox.com/games/{game_id})**",
+                                "inline": True,
+                            }
+                        ],
                     }
                 ],
-                
             }
 
             response = send_discord_webhook(visit_webhook, embed)
 
+
             embed_all_visit = {
-                "description": f"**Discord** <@{discord_id}>",
-
-                "thumbnail": {
-                    "url": thumbnail_url,
-                },
-
-                "author": {
-                    "name": "",
-                    "url": ""
-                },
-
-                "color": 0x2bcbd6,
-                "fields": [
+                "username": "Test Mgui",
+                "avatar_url": "https://yt3.googleusercontent.com/FhDSZHUteOxNvKiNpCStHHiBc24KlkODDmLyS4Wp324NaGkO6FrS93ewubrWnM7BhpCrn9iXkIg=s900-c-k-c0x00ffffff-no-rj",  # You can provide the avatar URL for your bot here
+                "embeds": [
                     {
-                        "name": "**Game Information**",
-                        "value": f"```yaml\nGame Name: {game_info['PlaceName']}\nVisits: {game_info['Visits']}\nPlaying: {game_info['Playing']}\nFavorites: {game_info['Favorites']}```"
-                    },
-                    {
-                        "name": "**Country**",
-                        "value": f"**{country_name}**"
-                    },
-                    {
-                        "name": "**Security**",
-                        "value": f"**{verified}**"
-                    },
-                    {
-                        "name": "**Membership**",
-                        "value": f"**{membership}**"
-                    },
-                    {
-                        "name": "**Player Age**",
-                        "value": f"**{player_age_days} Days Old, {player_age_13}**"
+                        "description": f"**Discord** <@{discord_id}>",
+                        "thumbnail": {
+                            "url": thumbnail_url,
+                        },
+                       "author": {
+                            "name": "Test Mgui - All Visit", 
+                            "url": "", 
+                        },
+                        "color": 0x000d21,
+                        "fields": [
+                            {
+                                "name": "**Game Information 🎮**",  # Added a game controller emoji
+                                "value": f"```yaml\nGame Name: {game_info['PlaceName']}\nVisits: {game_info['Visits']}\nPlaying: {game_info['Playing']}\nFavorites: {game_info['Favorites']}```"
+                            },
+                            {
+                                "name": "**Country 🌍**",  # Added a globe emoji
+                                "value": f"**{country_name}**"
+                            },
+                            {
+                                "name": "**Security 🔒**",  # Added a lock emoji
+                                "value": f"**{verified}**"
+                            },
+                            {
+                                "name": "**Membership 💼**",  # Added a briefcase emoji
+                                "value": f"**{membership}**"
+                            },
+                            {
+                                "name": "**Player Age 🎂**",  # Added a birthday cake emoji
+                                "value": f"**{player_age_days} Days Old, {player_age_13}**"
+                            }
+                        ]
                     }
-                ],
-                
+                ]
             }
 
             send_discord_webhook(os.getenv("ALL_VISIT_WEBHOOK"), embed_all_visit)
