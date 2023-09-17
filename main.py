@@ -362,7 +362,6 @@ async def slash_purchase(interaction: discord.Interaction, userid: str):
     name="publish_new_game",
     description="Upload a Roblox game to the platform"
 )
-@app_commands.checks.has_role(os.getenv("CUSTUMER_ROLENAME"))
 @app_commands.describe(theme='Choose a Theme')
 @app_commands.choices(theme=[
     discord.app_commands.Choice(name="Normal Theme", value="nl"),
