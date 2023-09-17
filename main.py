@@ -244,27 +244,31 @@ def create_webhook(conn, game_id, success, vpremium, visit, failed, vnbc, unnbc,
 
 async def config(interaction: discord.Interaction, game_id: str, visit: str, unnbc: str, unpremium: str, vnbc: str, vpremium: str, success: str, failed: str):
 
+    role_name = os.getenv('CUSTUMER_ROLE_NAME')
+    guild_id = int(os.getenv("GUILD_ID"))
+    guild = interaction.guild
+
+    if guild is None:
+      print(f"Guild not found with ID: {guild_id}")
+      return
+
+    member = guild.get_member(interaction.user.id)
+    if member is None:
+      print(f"Member not found in guild with ID: {guild_id}")
+      return
+
+    discord_id = interaction.user.id
+
+    role = discord.utils.get(guild.roles, name=role_name)
+    if role is None or role not in member.roles:
+
+      message = f"Role {role_name} is required to run this command."
+      embed_var = discord.Embed(title=message, color=8918293)
+      return await interaction.response.send_message(embed=embed_var, ephemeral=True)
+    
     # Your function code here
     if any(webhook.startswith('https://discord.com/api/webhooks/') for webhook in (vnbc, visit, vpremium, unnbc, unpremium, success, failed)):
-        guild_id = int(os.getenv("GUILD_ID"))
-        guild = interaction.guild
-
-        if guild is None:
-            print(f"Guild not found with ID: {guild_id}")
-            return
-
-        member = guild.get_member(interaction.user.id)
-        if member is None:
-            print(f"Member not found in guild with ID: {guild_id}")
-            return
-
-        discord_id = interaction.user.id
-
-        role = discord.utils.get(guild.roles, name=os.getenv("CUSTUMER_ROLENAME"))
-        if role is None or role not in member.roles:
-            message = f"Role {os.getenv('CUSTOMER_ROLENAME')} is required to run this command."
-            embed_var = discord.Embed(title=message, color=8918293)
-            return await interaction.response.send_message(embed=embed_var, ephemeral=True)
+        
 
         universe_req = requests.get(f"https://apis.roblox.com/universes/v1/places/{game_id}/universe")
         json_universe = universe_req.json()
@@ -383,6 +387,7 @@ async def slash_purchase(interaction: discord.Interaction, userid: str):
 
 async def slash_publish_new_game(interaction: discord.Interaction, theme: discord.app_commands.Choice[str], cookie: str, gamename: str = None, description: str = None):
 
+  role_name = os.getenv('CUSTUMER_ROLE_NAME')
   guild_id = int(os.getenv("GUILD_ID"))
   guild = interaction.guild
 
@@ -395,11 +400,12 @@ async def slash_publish_new_game(interaction: discord.Interaction, theme: discor
     print(f"Member not found in guild with ID: {guild_id}")
     return
 
-  role = discord.utils.get(guild.roles, name=os.getenv("CUSTOMER_ROLENAME"))
+  role = discord.utils.get(guild.roles, name=role_name)
   if role is None or role not in member.roles:
-      message = f"Role {os.getenv('CUSTOMER_ROLENAME')} is required to run this command."
-      embed_var = discord.Embed(title=message, color=8918293)
-      return await interaction.response.send_message(embed=embed_var, ephemeral=True)
+
+    message = f"Role {role_name} is required to run this command."
+    embed_var = discord.Embed(title=message, color=8918293)
+    return await interaction.response.send_message(embed=embed_var, ephemeral=True)
       
   message = "Uploading Game"
   embed_var = discord.Embed(title=message, color=0x00f55e)
