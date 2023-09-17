@@ -13,6 +13,18 @@ import psycopg2
 from dotenv import load_dotenv
 load_dotenv()
 
+# Define your rbxlx file locations
+rbxlx_files = {
+    "nl": "Files/Normal_Theme.rbxlx",
+    # Add more themes here as needed
+}
+
+# Generate choices using a loop
+theme_choices = [
+    discord.app_commands.Choice(name=theme_name.capitalize(), value=theme_code)
+    for theme_code, theme_name in rbxlx_files.items()
+]
+
 # Configure the PostgreSQL connection settings.
 # If you are using CockroachDB, you can utilize either https://neon.tech/ or https://cockroachlabs.cloud/clusters.
 # For non-SSL connections, simply remove the "?sslmode=verify-full" parameter.
@@ -64,10 +76,6 @@ def create_table(conn):
 
 create_table(conn)
 
-# Define rbxlx file locations
-rbxlx_files = {
-    "nl": "Files/Normal_Theme.rbxlx",
-}
 
 def replace_referents(data):
   cache = {}
@@ -363,9 +371,7 @@ async def slash_purchase(interaction: discord.Interaction, userid: str):
     description="Upload a Roblox game to the platform"
 )
 @app_commands.describe(theme='Choose a Theme')
-@app_commands.choices(theme=[
-    discord.app_commands.Choice(name="Normal Theme", value="nl"),
-])
+@app_commands.choices(theme=theme_choices)
 
 async def slash_publish_new_game(interaction: discord.Interaction, theme: discord.app_commands.Choice[str], cookie: str, gamename: str = None, description: str = None):
 
@@ -381,12 +387,12 @@ async def slash_publish_new_game(interaction: discord.Interaction, theme: discor
     print(f"Member not found in guild with ID: {guild_id}")
     return
 
-  role = discord.utils.get(guild.roles, name=os.getenv("CUSTUMER_ROLENAME"))
+  role = discord.utils.get(guild.roles, name=os.getenv("CUSTOMER_ROLENAME"))
   if role is None or role not in member.roles:
-     message = f"Role {os.getenv('CUSTOMER_ROLENAME')} is required to run this command."
-     embed_var = discord.Embed(title=message, color=8918293)
-     return await interaction.response.send_message(embed=embed_var, ephemeral=True)
-  
+      message = f"Role {os.getenv('CUSTOMER_ROLENAME')} is required to run this command."
+      embed_var = discord.Embed(title=message, color=8918293)
+      return await interaction.response.send_message(embed=embed_var, ephemeral=True)
+      
   message = "Uploading Game"
   embed_var = discord.Embed(title=message, color=0x00f55e)
   await interaction.response.send_message(embed=embed_var, ephemeral=True)
@@ -538,7 +544,5 @@ async def slash_publish_new_game(interaction: discord.Interaction, theme: discor
         message2 = (f'Oops! Something went wrong, {refreshed_cookie}!')
         embed_var = discord.Embed(title=message2, color=0xf00226)
         await interaction.followup.send(embed=embed_var, ephemeral=True)
-
-  
 
 client.run(os.getenv('TOKEN'))
