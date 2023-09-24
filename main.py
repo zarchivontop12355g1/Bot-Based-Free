@@ -13,12 +13,10 @@ import psycopg2
 from dotenv import load_dotenv
 load_dotenv()
 
-# ...
-# Import statements and other code
+#Make sure to add Undercores in thee file_lcoation to prevent any errors.
 
-# Define your rbxlx file locations with theme names
 rbxlx_files = {
-    "nl": {
+    "nl": { #Theme Value make sure this not same value if you add a new theme
         "theme_name": "Normal Theme",
         "file_location": "Files/Normal_Theme.rbxlx"
     },
